@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use \App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\View;
@@ -10,7 +10,7 @@ use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\View\Factory as ViewFactory;
 use App\Repositories\OAuth\ClientRepositoryInterface;
 
-class ClientController extends Controller {
+class ClientController extends BaseController {
 
 	/**
 	 * @var \Illuminate\Http\Request

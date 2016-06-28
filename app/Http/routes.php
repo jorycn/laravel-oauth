@@ -20,41 +20,63 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 
-Route::get("/manage", ['as'=>'oauth.manage', 'uses'=>'ManagerController@index']);
-
+// Authorization code grant
 Route::get('oauth/authorize', ['as' => 'oauth.authorize.get', 'middleware' => ['check-authorization-params', 'auth'], function() {
    $authParams = Authorizer::getAuthCodeRequestParams();
-
    $formParams = array_except($authParams,'client');
-
    $formParams['client_id'] = $authParams['client']->getId();
 
    $formParams['scope'] = implode(config('oauth2.scope_delimiter'), array_map(function ($scope) {
        return $scope->getId();
    }, $authParams['scopes']));
-
    return View::make('oauth.authorization-form', ['params' => $formParams, 'client' => $authParams['client']]);
 }]);
 
-Route::post('oauth/authorize', ['as' => 'oauth.authorize.post', 'middleware' => ['csrf', 'check-authorization-params', 'auth'], function() {
-
+Route::post('oauth/authorize', ['as' => 'oauth.authorize.post', 'middleware' => ['check-authorization-params', 'auth'], function() {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = '/';
-
     // If the user has allowed the client to access its data, redirect back to the client with an auth code.
     if (Request::has('approve')) {
         $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
     }
-
     // If the user has denied the client to access its data, redirect back to the client with an error message.
     if (Request::has('deny')) {
         $redirectUri = Authorizer::authCodeRequestDeniedRedirectUri();
     }
-
     return Redirect::to($redirectUri);
 }]);
 
+//get token
 Route::post('oauth/access_token', function() {
     return Response::json(Authorizer::issueAccessToken());
 });
+
+//auth demo
+Route::get('user', ['middleware' => 'oauth', function() {
+    $user_id=Authorizer::getResourceOwnerId(); // the token user_id
+    $user=\App\User::find($user_id);// get the user data from database
+
+    return Response::json($user);
+}]);
+
+//dingo api demo
+$api = app('Dingo\Api\Routing\Router');
+$api->version('v1', function ($api) {
+
+    $api->group(['middleware' => 'oauth'],function($api){
+        $api->get('my',function(){
+            return Response::json([
+                'errcode'=>0,
+                'data'=>[
+                    'title'=>'hello api'
+                ]
+            ]);
+        });
+    });
+});
+
+//password oauth grant demo
+Route::get('demo/resource', ['as'=>'demo.resource', function(){
+    return view('demo');
+}]);

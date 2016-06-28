@@ -25,6 +25,54 @@ return [
     | Please see this link to find available grant types
     | http://git.io/vJLAv
     |
+    | Available grant types are:
+    |
+    | 'grant_types' => [
+    |
+    |    'authorization_code' => [
+    |        'class'            => 'League\OAuth2\Server\Grant\AuthCodeGrant',
+    |        'access_token_ttl' => 3600,
+    |
+    |        // the authorization code time to live
+    |        'auth_token_ttl'   => 3600,
+    |    ],
+    |
+    |    'password' => [
+    |        'class'            => 'League\OAuth2\Server\Grant\PasswordGrant',
+    |        'access_token_ttl' => 604800,
+    |
+    |        // the code to run in order to verify the user's identity
+    |        'callback'         => function($username, $password){
+    |            $credentials = [
+    |                'email'    => $username,
+    |                'password' => $password,
+    |            ];
+    |
+    |            if (Auth::once($credentials)) {
+    |                return Auth::user()->id;
+    |            } else {
+    |                return false;
+    |            }
+    |        }
+    |    ],
+    |
+    |    'client_credentials' => [
+    |        'class'                 => 'League\OAuth2\Server\Grant\ClientCredentialsGrant',
+    |        'access_token_ttl'      => 3600,
+    |    ],
+    |
+    |    'refresh_token' => [
+    |        'class'                 => 'League\OAuth2\Server\Grant\RefreshTokenGrant',
+    |        'access_token_ttl'      => 3600,
+    |
+    |        // the refresh token time to live
+    |        'refresh_token_ttl'     => 604800,
+    |
+    |        // whether or not to issue a new refresh token when a new access token is issued
+    |        'rotate_refresh_tokens' => false,
+    |    ],
+    |
+    | ],
     */
 
     'grant_types' => [
@@ -32,6 +80,11 @@ return [
             'class' => '\League\OAuth2\Server\Grant\AuthCodeGrant',
             'access_token_ttl' => 3600,
             'auth_token_ttl'   => 3600
+        ],
+        'password' => [
+            'class' => '\League\OAuth2\Server\Grant\PasswordGrant',
+            'callback' => '\App\Http\Controllers\OAuth\PasswordGrantVerifier@verify',
+            'access_token_ttl' => 3600
         ]
     ],
 

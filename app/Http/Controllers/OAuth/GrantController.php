@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use \App\Http\Controllers\Controller;
-use Illuminate\Routing\Controller as BaseController;
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\View\Factory as ViewFactory;
 use \App\Repositories\OAuth\GrantRepositoryInterface;
 
-class GrantController extends Controller {
+class GrantController extends BaseController {
 
 	/**
 	 * @var \Illuminate\Http\Request

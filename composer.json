@@ -8,7 +8,9 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "lucadegasperi/oauth2-server-laravel": "5.1.*",
-        "adamwathan/bootforms": "^0.8.1"
+        "adamwathan/bootforms": "^0.8.1",
+        "webpatser/laravel-uuid": "^2.0",
+        "dingo/api": "1.0.*@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

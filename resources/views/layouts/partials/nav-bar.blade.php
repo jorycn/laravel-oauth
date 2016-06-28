@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a href="{{route('oauth.clients.index')}}" class="navbar-brand">OAuth2 Server Manager</a>
+            <a href="/" class="navbar-brand">OAuth2 Server Manager</a>
         </div>
 
         <div class="collapse navbar-collapse" id="nav-bar">

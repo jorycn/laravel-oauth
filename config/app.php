@@ -168,6 +168,7 @@ return [
         App\Providers\OAuth\ScopeServiceProvider::class,
 
         AdamWathan\BootForms\BootFormsServiceProvider::class,
+        Dingo\Api\Provider\LaravelServiceProvider::class,
     ],
 
     /*
