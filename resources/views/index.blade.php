@@ -1,0 +1,1 @@
+<a href='{{ route("oauth.manage") }}'>OAuth2 Server Manager</a>
