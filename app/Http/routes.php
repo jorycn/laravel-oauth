@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return View::make("index");
-});
+Route::get('/', ['as'=>'home', 'middleware'=>'auth', 'uses'=>'HomeController@index']);
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -64,15 +62,39 @@ Route::get('user', ['middleware' => 'oauth', function() {
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
 
-    $api->group(['middleware' => 'oauth'],function($api){
-        $api->get('my',function(){
-            return Response::json([
-                'errcode'=>0,
-                'data'=>[
-                    'title'=>'hello api'
-                ]
-            ]);
+    $api->group(['middleware' => ['oauth']],function($api){
+
+        $api->group(['middleware'=>'oauth-user'],function($api){
+            //password模式授权内容
+
         });
+        $api->group(['middleware'=>'oauth-client'],function($api){
+            //client_credentials 模式授权
+            $api->get('my',function(){
+                return Response::json([
+                    'errcode'=>0,
+                    'data'=>[
+                        'title'=>'hello api'
+                    ]
+                ]);
+            });
+
+            //微信接口分布demo
+            $api->group(['middleware'=>'oauth:wechat_mp_subscribe'],function($api){
+                //订阅号最低权限
+
+                $api->group(['middleware'=>'oauth:wechat_mp_subscribe_checked'],function($api){
+                    //认证订阅号
+                    $api->group(['middleware'=>'oauth:wechat_mp_serve'],function($api){
+                        //服务号
+                        $api->group(['middleware'=>'oauth:wechat_mp_serve'],function($api){
+                            //认证服务号
+                        });
+                    });
+                });
+            });
+        });
+
     });
 });
 

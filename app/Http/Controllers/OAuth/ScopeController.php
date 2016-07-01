@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\View\Factory as ViewFactory;
 use App\Repositories\OAuth\ScopeRepositoryInterface;
 
-class ScopeController extends BaseController {
+class ScopeController extends Controller {
 
 	/**
 	 * @var \Illuminate\Http\Request
@@ -67,7 +67,7 @@ class ScopeController extends BaseController {
 		$this->validationFactory = $validationFactory;
 
 		$this->scopes = $scopes;
-        $this->middleware('web');
+		$this->middleware(['web','auth']);
 	}
 
 	/**

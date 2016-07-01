@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\View;
@@ -10,7 +10,7 @@ use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\View\Factory as ViewFactory;
 use App\Repositories\OAuth\ClientRepositoryInterface;
 
-class ClientController extends BaseController {
+class ClientController extends Controller {
 
 	/**
 	 * @var \Illuminate\Http\Request
@@ -68,7 +68,8 @@ class ClientController extends BaseController {
 		$this->validationFactory = $validationFactory;
 
 		$this->clients = $clients;
-        $this->middleware('web');
+
+        $this->middleware(['web','auth']);
 	}
 
 	/**
